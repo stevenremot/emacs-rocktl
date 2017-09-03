@@ -12,19 +12,10 @@
 (defvar rocktl--task-instances '()
   "A list of all tasks currently instanciated.")
 
-(defvar rocktl--tasks '()
-  "The list of the defined tasks.")
-
 ;; -----------------------------------------------------------------------------
 ;; Models
 
-
-
-(cl-defstruct rocktl-task name command)
-
-(cl-defun rocktl-define-task (&key name command)
-  "Create a new runnable task."
-  (add-to-list 'rocktl--tasks (make-rocktl-task :name name :command command)))
+(cl-defstruct rocktl-task name command directory)
 
 (cl-defstruct rocktl-task-instance task status)
 
@@ -36,26 +27,34 @@
   "Return the name of the task associated to an INSTANCE."
   (rocktl-task-name (rocktl-task-instance-task instance)))
 
+(defun rocktl-task-instance-directory (instance)
+  "Return the directory of the task associated to an INSTANCE."
+  (rocktl-task-directory (rocktl-task-instance-task instance)))
 
 ;; -----------------------------------------------------------------------------
 ;; API
+
+(defun rocktl-task= (task1 task2)
+  "Return t when TASK1 and TASK2 are equal."
+  (and (string= (rocktl-task-name task1) (rocktl-task-name task2))
+       (string= (rocktl-task-directory task1) (rocktl-task-directory task2))))
 
 (defun rocktl-get-instances ()
   "Return all the current task instances."
   rocktl--task-instances)
 
-(defun rocktl-find-task (name)
-  "Return the task with the specified NAME."
+(defun rocktl-find-task (task-list name)
+  "Return the task in TASK-LIST with the specified NAME."
   (let ((predicate (lambda (task) (eql name (rocktl-task-name task)))))
-    (car (seq-filter predicate rocktl--tasks))))
+    (car (seq-filter predicate task-list))))
 
-(defun rocktl-get-task-names ()
-  "Return all the available tasks' names."
-  (seq-map #'rocktl-task-name rocktl--tasks))
+(defun rocktl-get-task-names (task-list)
+  "Return all the available tasks' names in TASK-LIST."
+  (seq-map #'rocktl-task-name task-list))
 
 (defun rocktl-find-instance (task)
   "Return an instance associated to TASK."
-  (let ((predicate (lambda (instance) (eql task (rocktl-task-instance-task instance)))))
+  (let ((predicate (lambda (instance) (rocktl-task= task (rocktl-task-instance-task instance)))))
     (car (seq-filter predicate rocktl--task-instances))))
 
 (defun rocktl-get-instance-for (task)

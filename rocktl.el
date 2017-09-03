@@ -11,8 +11,8 @@
 (defun rocktl-run-task (name)
   "Run the task having the specified NAME."
   (interactive
-   (list (completing-read "Command:" (rocktl-get-task-names) nil t)))
-  (let ((task (rocktl-find-task (intern name)))
+   (list (completing-read "Command:" (rocktl-get-task-names (rocktl-shell-tasks)) nil t)))
+  (let ((task (rocktl-find-task (rocktl-shell-tasks) (intern name)))
         command
         instance)
     (unless task
