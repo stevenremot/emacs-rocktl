@@ -5,6 +5,7 @@
 ;;; Code:
 (require 'rocktl-models)
 (require 'rocktl-status)
+(require 'rocktl-shell)
 
 ;;;###autoload
 (defun rocktl-run-task (name)
