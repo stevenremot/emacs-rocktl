@@ -9,13 +9,43 @@
 ;; -----------------------------------------------------------------------------
 ;; Task helper
 
+(defun rocktl--make-process-sentinel (instance process event)
+  "Create a process sentinel for a task INSTANCE.
+
+PROCESS is the running process.
+EVENT is the sent event."
+  (cond
+   ((string= event "finished\n") (rocktl-set-status instance :finished))
+   ((or (string-prefix-p "exited abnormally" event) (string-prefix-p "failed" event))
+    (rocktl-set-status instance :failed))
+   (t (rocktl-set-status instance :unknown))))
+
+(defun rocktl--make-shell-command (shell-command instance)
+  "Create the command for a shell task.
+
+SHELL-COMMAND is a string containing the shell command to run.
+
+INSTANCE is the rocktl instance."
+  (let* ((default-directory (rocktl-task-instance-directory instance))
+         (name (format "*task:%S*" (rocktl-task-instance-name instance)))
+         (buffer (get-buffer-create name)))
+
+    (make-process
+     :name name
+     :buffer buffer
+     :command (list shell-file-name shell-command-switch shell-command)
+     :filter #'comint-output-filter
+     :sentinel (apply-partially #'rocktl--make-process-sentinel instance))
+
+    (with-current-buffer buffer
+      (shell-mode))
+    (switch-to-buffer-other-window buffer)
+    (rocktl-set-status instance :running)))
+
 (cl-defun rocktl-make-shell-task (&key name command directory)
   "Define a task that will execute a shell command."
   (make-rocktl-task :name name
-                    :command #'(lambda (instance)
-                                 (let ((default-directory directory))
-                                   (async-shell-command command))
-                                 (rocktl-set-status instance :running))
+                    :command (apply-partially #'rocktl--make-shell-command command)
                     :directory directory))
 
 ;; -----------------------------------------------------------------------------
