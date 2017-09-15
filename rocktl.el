@@ -23,6 +23,10 @@
 
     (funcall command instance)))
 
+
+;; Initial tasks loading
+(rocktl-refresh-shell-tasks)
+
 (provide 'rocktl)
 
 ;;; rocktl.el ends here
