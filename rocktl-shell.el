@@ -31,6 +31,10 @@ INSTANCE is the rocktl instance."
          (name (format "*task:%S*" (rocktl-task-instance-name instance)))
          (buffer (get-buffer-create name)))
 
+    (with-current-buffer buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)))
+
     (make-process
      :name name
      :buffer buffer
