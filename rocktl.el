@@ -9,7 +9,9 @@
 
 ;;;###autoload
 (defun rocktl-run-task (name)
-  "Run the task having the specified NAME."
+  "Run the task having the specified NAME.
+
+If the task is already started, go to its buffer."
   (interactive
    (list (completing-read "Command:" (rocktl-get-task-names (rocktl-shell-tasks)) nil t)))
   (let ((task (rocktl-find-task (rocktl-shell-tasks) (intern name)))
@@ -21,7 +23,9 @@
     (setq command (rocktl-task-command task)
           instance (rocktl-get-instance-for task))
 
-    (funcall command instance)))
+    (if (rocktl-is-running? instance)
+        (rocktl-switch-to-instance instance)
+      (funcall command instance))))
 
 
 ;; Initial tasks loading

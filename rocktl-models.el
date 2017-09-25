@@ -35,6 +35,10 @@
   "Return the directory of the task associated to an INSTANCE."
   (rocktl-task-directory (rocktl-task-instance-task instance)))
 
+(defun rocktl-is-running? (instance)
+  "Return t if INSTANCE has running status."
+  (eql (rocktl-task-instance-status instance) :running))
+
 ;; -----------------------------------------------------------------------------
 ;; API
 
@@ -75,6 +79,12 @@
                      (and (string= name (rocktl-task-instance-name instance))
                           (string= directory (rocktl-task-instance-directory instance))))))
     (car (seq-filter predicate rocktl--task-instances))))
+
+(defun rocktl-switch-to-instance (instance)
+  "Switch to INSTANCE's buffer."
+  (let ((buffer (rocktl-task-instance-buffer instance)))
+    (when buffer
+      (switch-to-buffer-other-window buffer))))
 
 (provide 'rocktl-models)
 

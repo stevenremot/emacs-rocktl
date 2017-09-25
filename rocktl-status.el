@@ -24,10 +24,8 @@
   "Visit the entry's buffer at POINT."
   (interactive)
   (let* ((entry (tabulated-list-get-entry))
-         (instance (rocktl-find-instance-by-name-and-dir (elt entry 0) (elt entry 1)))
-         (buffer (rocktl-task-instance-buffer instance)))
-    (when buffer
-      (switch-to-buffer-other-window buffer))))
+         (instance (rocktl-find-instance-by-name-and-dir (elt entry 0) (elt entry 1))))
+    (rocktl-switch-to-instance instance)))
 
 (defvar rocktl-status-mode-map
   (let ((map (make-sparse-keymap)))
