@@ -17,11 +17,15 @@
 
 (cl-defstruct rocktl-task name command directory)
 
-(cl-defstruct rocktl-task-instance task status)
+(cl-defstruct rocktl-task-instance task status buffer)
 
 (defun rocktl-set-status (instance new-status)
   "Update INSTANCE's status to NEW-STATUS."
   (setf (rocktl-task-instance-status instance) new-status))
+
+(defun rocktl-set-buffer (instance new-buffer)
+  "Update INSTANCE's buffer to NEW-BUFFER."
+  (setf (rocktl-task-instance-buffer instance) new-buffer))
 
 (defun rocktl-task-instance-name (instance)
   "Return the name of the task associated to an INSTANCE."
@@ -64,6 +68,13 @@
       (setq instance (make-rocktl-task-instance :task task))
       (add-to-list 'rocktl--task-instances instance))
     instance))
+
+(defun rocktl-find-instance-by-name-and-dir (name directory)
+  "Return the instance associated to NAME and DIRECTORY's task."
+  (let ((predicate (lambda (instance)
+                     (and (string= name (rocktl-task-instance-name instance))
+                          (string= directory (rocktl-task-instance-directory instance))))))
+    (car (seq-filter predicate rocktl--task-instances))))
 
 (provide 'rocktl-models)
 

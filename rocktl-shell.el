@@ -45,7 +45,8 @@ INSTANCE is the rocktl instance."
     (with-current-buffer buffer
       (shell-mode))
     (switch-to-buffer-other-window buffer)
-    (rocktl-set-status instance :running)))
+    (rocktl-set-status instance :running)
+    (rocktl-set-buffer instance buffer)))
 
 (cl-defun rocktl-make-shell-task (&key name command directory)
   "Define a task that will execute a shell command."

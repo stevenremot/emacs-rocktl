@@ -20,6 +20,21 @@
               (seq-map #'rocktl--status-mode-create-entry (rocktl-get-instances)))
   (tabulated-list-print))
 
+(defun rocktl--status-visit-entry ()
+  "Visit the entry's buffer at POINT."
+  (interactive)
+  (let* ((entry (tabulated-list-get-entry))
+         (instance (rocktl-find-instance-by-name-and-dir (elt entry 0) (elt entry 1)))
+         (buffer (rocktl-task-instance-buffer instance)))
+    (when buffer
+      (switch-to-buffer-other-window buffer))))
+
+(defvar rocktl-status-mode-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent rocktl-status-mode-map tabulated-list-mode-map)
+    (define-key map (kbd "RET") #'rocktl-status-mode-map)
+    map))
+
 (define-derived-mode rocktl-status-mode tabulated-list-mode "TASKS"
   "Major mode for managing running tasks."
   (setq-local tabulated-list-format
