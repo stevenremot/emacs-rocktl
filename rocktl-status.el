@@ -29,7 +29,7 @@
 
 (defvar rocktl-status-mode-map
   (let ((map (make-sparse-keymap)))
-    (set-keymap-parent rocktl-status-mode-map tabulated-list-mode-map)
+    (set-keymap-parent map tabulated-list-mode-map)
     (define-key map (kbd "RET") #'rocktl-status-mode-map)
     map))
 
