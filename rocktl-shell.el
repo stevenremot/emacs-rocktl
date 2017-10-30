@@ -44,7 +44,9 @@ INSTANCE is the rocktl instance."
 
     (with-current-buffer buffer
       (shell-mode))
-    (switch-to-buffer-other-window buffer)
+
+    (unless (eq (current-buffer) buffer)
+      (switch-to-buffer-other-window buffer))
     (rocktl-set-status instance :running)
     (rocktl-set-buffer instance buffer)))
 
