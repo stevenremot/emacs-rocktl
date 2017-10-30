@@ -30,7 +30,7 @@
 (defvar rocktl-status-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map tabulated-list-mode-map)
-    (define-key map (kbd "RET") #'rocktl-status-mode-map)
+    (define-key map (kbd "RET") #'rocktl--status-visit-entry)
     map))
 
 (define-derived-mode rocktl-status-mode tabulated-list-mode "TASKS"
