@@ -17,7 +17,7 @@ Clone this repository. Add this to your init file:
 ** Using quelpa
 
 #+BEGIN_SRC emacs-lisp
-(quelpa (rocktl :fetcher git :url "git@bitbucket.org:stevenremot/emacs-rocktl.git"))
+(quelpa '(rocktl :fetcher github :repo "stevenremot/emacs-rocktl"))
 #+END_SRC
 
 * Usage
