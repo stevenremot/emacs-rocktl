@@ -1,6 +1,12 @@
 ;;; rocktl.el --- General task runner -*- lexical-binding: t -*-
+;;; Version: 0.1.0
+;;; Package-Requires: ((emacs "24"))
+;;; URL: https://github.com/stevenremot/emacs-rocktl
 
 ;;; Commentary:
+;;
+;; Rocktl allows you to define task associated to a specific directory,
+;; and run them quickly.
 ;;
 ;;; Code:
 (require 'rocktl-models)
