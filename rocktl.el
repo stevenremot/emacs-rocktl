@@ -19,7 +19,7 @@
 
 If the task is already started, go to its buffer."
   (interactive
-   (list (completing-read "Command:" (rocktl-get-task-names (rocktl-shell-tasks)) nil t)))
+   (list (completing-read "Command: " (rocktl-get-task-names (rocktl-shell-tasks)) nil t)))
   (let ((task (rocktl-find-task (rocktl-shell-tasks) (intern name)))
         command
         instance)
